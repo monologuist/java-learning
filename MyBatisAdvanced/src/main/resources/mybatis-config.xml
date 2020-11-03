@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+
+<configuration>
+    <!--    定义属性-->
+    <properties resource="jdbc.properties"/>
+        <!--        <property name="jdbc_url" value="jdbc:mysql:///mybatistest?serverTimezone=Asia/Shanghai&amp;characterEncoding=utf8"/>-->
+<!--    </properties>-->
+
+    <typeAliases>
+        <!--    为这个包下的所有类取别名  当指定package时将批量为包下所有类指定别名为类名小写    -->
+        <package name="com.nyf.pojo"/>
+    </typeAliases>
+
+    <environments default="development">
+        <!--        可配置多个环境  并指定默认使用的环境-->
+        <environment id="development">
+            <!--            指定事务管理器-->
+            <transactionManager type="JDBC"/>
+            <!--            指定数据源 就是数据来自哪里 这里默认使用MyBatis自带的连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc_driver}"/>
+                <!--                //表示本机 localhost  &amp;就是&  xml中&需要转译-->
+                <property name="url" value="${jdbc_url}"/>
+                <property name="username" value="${jdbc_username}"/>
+                <property name="password" value="${jdbc_password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+    <!--    指定要加载的映射文件-->
+    <!--在mapper.xml文件中定义sql语句后,
+    就必须让MyBatis知道,到哪里去找这些定义好的sql,
+    这就需要在配置文件中指出要加载的mapper的位置;
+    MyBatis支持4种方式来加载mapper文件-->
+    <mappers>
+
+        <!--  1.直接指定文件目录      -->
+<!--                <mapper resource="mapper/ProductMapper.xml"/>-->
+<!--                <mapper resource="com/nyf/dao/ProductDao.xml"/>-->
+        <!--  2.指定接口类型 让它自己找去  要保证mapper 文件名称和接口名称一致且在同一个目录下   -->
+        <!--  注：在resources下新建相同的包名时，不要用.，用/，即建的时候输入的是：com/nyf/dao   -->
+<!--                <mapper class="com.nyf.dao.ProductDao"/>-->
+
+        <!--  3.直接指定包名,要保证mapper 文件名称和接口名称一致且在同一个目录下      -->
+        <!--  注意事项同上，记牢，小点害人不浅 -->
+        <package name="com.nyf.dao"/>
+        <package name="com.ahn.dao"/>
+    </mappers>
+</configuration>

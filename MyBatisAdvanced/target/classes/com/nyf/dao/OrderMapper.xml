@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nyf.dao.OrderMapper">
+
+    <!--  一对一的结果映射  -->
+    <resultMap id="order_user_Map" type="order" autoMapping="true">
+        <result column="o_id" property="id"/>
+        <!--   关联表数据的映射     -->
+        <association property="user" javaType="user">
+            <result column="user_id" property="id"/>
+            <result column="username" property="name"/>
+            <result column="address" property="address"/>
+            <result column="sex" property="sex"/>
+        </association>
+    </resultMap>
+    
+
+
+    <!--  一对一的,连表查询语句  -->
+    <select id="selectOrderByID" parameterType="int" resultMap="order_user_Map">
+        select  o.id as o_id, o.*,u.username,u.address
+        from orders o  join kuser u
+        on o.user_id = u.id
+        where o.id = #{order_id}
+    </select>
+
+
+
+    <!--  一对一的结果映射   使用嵌套查询的方式  -->
+    <!--查的是订单，type当然是order column是传给内层查询的参数 我查user表，就能拿到user_id 再把user_id传给order-->
+    <resultMap id="order_user" type="order">
+        <id column="id" property="id"/>
+        <association property="user" javaType="user" column="user_id" select="selectUserByID"/>
+    </resultMap>
+
+    <!-- 嵌套方式的外层查询   -->
+    <select id="selectOrderByID2" parameterType="int" resultMap="order_user">
+        select * from orders where id = #{id}
+    </select>
+
+    <!-- 嵌套方式的内层查询   -->
+    <select id="selectUserByID" parameterType="int" resultType="user">
+        select * from kuser where id = #{id}
+    </select>
+
+    <!--根据用户的id 查询其所有订单-->
+    <select id="selectOrderByUserID" resultType="Order" parameterType="int">
+        select * from orders where user_id =#{id}
+    </select>
+
+</mapper>

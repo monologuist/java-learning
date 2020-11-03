@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nyf.dao.UserMapper">
+
+    <resultMap id="user_order_map" type="user" autoMapping="true">
+        <!--是用user去查order，user在外层，user表中字段名是username，pojo类User中属性是name，需要自定义映射-->
+        <!--注意:在处理一对多时无论如何在resultMap标签中必须至少存在一个手动映射字段。否则,将不会合并重复的主记录(user) -->
+        <!--建议用自定义映射时字段采用id，但我们这里name本来就对不上-->
+        <result column="username" property="name"/>
+        <!--   一对多的关键标签是  collection  表名是orders -->
+        <!--collection标签中：ofType用于指定元素的类型 javaType指定容器类型-->
+        <!--内层映射-->
+        <collection property="orders" ofType="Order" autoMapping="true">
+            <result column="oid" property="id"/>
+        </collection>
+    </resultMap>
+    
+    
+    <select id="selectByID" parameterType="int" resultMap="user_order_map">
+         select u.*,o.*,o.id oid
+         from kuser u join orders o
+         on o.user_id = u.id
+         where u.id = #{uid};
+    </select>
+    
+</mapper>
