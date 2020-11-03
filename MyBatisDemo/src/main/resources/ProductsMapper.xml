@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 用于多个Mapper出现相同的sql时区分不同包-->
+<mapper namespace="com.nyf.product">
+
+
+    <!--    根据id查询-->
+    <!--    Mapper文件使用来提供sql的文件 写的内容都是与sql相关的-->
+    <!--    id用于称呼/表示这条sql-->
+    <!--    parameterType指定输入的参数类型 这里表示sql语句接受一个整型类型的参数-->
+    <!--    resultType指定返回结果的类型 这里表示将结果映射到Products对象中-->
+    <!--    #{} 表示一个站位符等同于 ?
+            若输入参数是基础数据类型则可以随意写
+            若输入是一个POJO则写属性名称-->
+    <select id="selectProductById" parameterType="int" resultType="com.nyf.pojo.Products">
+        select * from products where pid = #{pid}
+    </select>
+
+    <!--    根据id删除-->
+    <delete id="deleteById" parameterType="int">
+        delete from products where pid = #{pid}
+    </delete>
+
+    <!--    根据id 更新数据-->
+    <update id="updateById" parameterType="com.nyf.pojo.Products">
+        update products set pname = #{pname},price = #{price} where pid = #{pid}
+    </update>
+
+    <!--    添加数据-->
+    <!--    获取自增的主键值  设置useGeneratedKeys为True  通过keyProperty指定主键值存放到哪个属性中 -->
+    <insert id="insertProduct" parameterType="com.nyf.pojo.Products" useGeneratedKeys="true" keyProperty="pid">
+        insert  into products values(null,#{pname},#{price},#{pdate},#{cid})
+    </insert>
+
+    <select id="selectAllProduct" resultType="com.nyf.pojo.Products">
+        select  * from products;
+    </select>
+
+    <!--模糊查询 关键字like -->
+    <select id="searchByKey" resultType="com.nyf.pojo.Products">
+        select * from products where pname like "%${kw}%"
+    </select>
+
+</mapper>

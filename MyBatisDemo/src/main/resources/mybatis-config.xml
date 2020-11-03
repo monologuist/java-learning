@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="development">
+        <!--        可配置多个环境  并指定默认使用的环境-->
+
+        <environment id="development">
+            <!--            指定事务管理器-->
+            <transactionManager type="JDBC"/>
+            <!--            指定数据源 就是数据来自哪里 这里默认使用MyBatis自带的连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <!--                //表示本机 localhost  &amp;就是&  xml中&需要转译-->
+                <property name="url" value="jdbc:mysql:///mybatistest?serverTimezone=Asia/Shanghai&amp;characterEncoding=utf8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="12345678"/>
+            </dataSource>
+        </environment>
+
+    </environments>
+    <!--    指定要加载的映射文件-->
+    <mappers>
+        <mapper resource="ProductsMapper.xml"/>
+    </mappers>
+</configuration>
